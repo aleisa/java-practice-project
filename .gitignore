@@ -1,0 +1,12 @@
+# Created by .ignore support plugin (hsz.mobi)
+/.idea/
+.idea/encodings.xml
+.idea/inspectionProfiles/
+.idea/java-practice-project.iml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/workspace.xml
+.idea/compiler.xml
+.idea/misc.xml
+java-eurka-server/java-eurka-server.iml
+
