@@ -1,4 +1,5 @@
 import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelInitializer;
@@ -30,6 +31,8 @@ public class NettyClient {
             }
         });
         ChannelFuture cf = b.connect().sync();
+        ChannelFuture cf2 = b.connect("127.0.0.1",8889);
+        cf2.channel().writeAndFlush(Unpooled.copiedBuffer("hello world".getBytes()));
         cf.addListener(new ChannelFutureListener() {
 
             public void operationComplete(ChannelFuture future) throws Exception {
@@ -47,6 +50,7 @@ public class NettyClient {
     }
 
     public static void main(String args[]) throws Exception {
+        System.setProperty("io.netty.noUnsafe","true");
         new NettyClient("127.0.0.1",8888).run();
     }
 }
