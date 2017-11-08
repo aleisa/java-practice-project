@@ -1,15 +1,17 @@
+package com.eminem.server;
+
+import com.eminem.handler.ServerHandler;
+import com.eminem.handler.WebSocketServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.http.HttpRequestDecoder;
-import io.netty.handler.codec.http.HttpRequestEncoder;
-
-import java.net.InetSocketAddress;
+import io.netty.handler.codec.http.HttpObjectAggregator;
+import io.netty.handler.codec.http.HttpServerCodec;
+import io.netty.handler.stream.ChunkedWriteHandler;
 
 public class NettyServer {
     private static final int port = 8888;
@@ -23,17 +25,22 @@ public class NettyServer {
             b.childHandler(new ChannelInitializer<SocketChannel>() {//有连接到达时会创建一个channel
                 protected void initChannel(SocketChannel ch) throws Exception {
                     // pipeline管理channel中的Handler，在channel队列中添加一个handler来处理业务
-                    ch.pipeline().addLast(new ServerHandler());
+                    ch.pipeline()
+                            .addLast("http-codec",new HttpServerCodec())
+                            .addLast("aggregator",new HttpObjectAggregator(65536))
+                            .addLast("http-chunked",new ChunkedWriteHandler())
+
+                    .addLast(new WebSocketServerHandler());
                 }
             });
 
             ChannelFuture f = b.bind(8888).sync();// 配置完成，开始绑定server，通过调用sync同步方法阻塞直到绑定成功
-            ChannelFuture f2 = b.bind(8889).sync();
+           /* ChannelFuture f2 = b.bind(8889).sync();*/
 
             System.out.println(NettyServer.class.getName() + " started and listen on " + f.channel().localAddress());
 
             f.channel().closeFuture().sync();// 应用程序会一直等待，直到channel关闭
-            f2.channel().closeFuture().sync();
+          /*  f2.channel().closeFuture().sync();*/
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

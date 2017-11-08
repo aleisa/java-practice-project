@@ -29,7 +29,13 @@
     <dependency>
         <groupId>io.netty</groupId>
         <artifactId>netty-all</artifactId>
-        <version>4.1.15.Final</version>
+        <version>5.0.0.Alpha2</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.msgpack/msgpack -->
+    <dependency>
+        <groupId>org.msgpack</groupId>
+        <artifactId>msgpack</artifactId>
+        <version>0.6.11</version>
     </dependency>
 
     <dependency>
@@ -62,6 +68,10 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-configuration-processor</artifactId>
         <optional>true</optional>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-mongodb</artifactId>
     </dependency>
 </dependencies>
     <dependencyManagement>
